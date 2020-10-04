@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.Contatos.TelaContatos"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#000"
+        >
+
+        <LinearLayout
+            android:id="@+id/linearLayoutBotaoContatosSalvos"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="clickBotaoContatosSalvos"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:gravity="center"
+                android:text="Contatos Salvos"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18dp"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutBotaoContatosNovos"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:gravity="center"
+                android:text="Contatos Novos"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18dp"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:onClick="clickBotaoContatosNovos"
+                />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/frameContatos"
+        android:background="#ffffff"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        tools:context=".activity.MainActivityUfape"
+        >
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/pagerContatos"
+            />
+
+    </FrameLayout>
+
+</LinearLayout>
