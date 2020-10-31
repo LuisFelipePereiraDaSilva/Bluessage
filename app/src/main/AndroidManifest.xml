@@ -44,6 +44,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.bluessage.View.TelaAjuda.TelaAjuda" />
         </activity>
+        <activity android:name=".View.Chat.TelaChat">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.bluessage.View.Chat.TelaChat" />S
+        </activity>
     </application>
 
 </manifest>

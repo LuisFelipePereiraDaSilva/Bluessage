@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bluessage.View.Chat.TelaChat;
 import com.example.bluessage.View.Contatos.TelaContatos;
 import com.example.bluessage.View.MenuTresPontos.MenuTresPontos;
 
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
         return layoutPrincipal;
     }
-    public void montarConversa(String nomeUsuario, String ultimaConversa, String imagem) {
+    public void montarConversa(final String nomeUsuario, String ultimaConversa, String imagem) {
 
         LinearLayout linearLayoutPrincipal = montarLinearLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.VERTICAL, 10, 0, 0, 0);
@@ -232,6 +233,15 @@ public class MainActivity extends AppCompatActivity {
 
         linearLayoutPrincipal.addView(linearLayoutCorpo);
         linearLayoutPrincipal.addView(linearLayoutLayoutRodape);
+
+        linearLayoutPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TelaChat.setNomeUsuario(nomeUsuario);
+                Intent in = new Intent(MainActivity.this, TelaChat.class);
+                startActivity(in);
+            }
+        });
 
         layoutConversas.addView(linearLayoutPrincipal);
     }
