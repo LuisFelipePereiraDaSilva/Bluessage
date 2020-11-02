@@ -45,28 +45,39 @@ public class TelaChat extends AppCompatActivity {
     }
 
     public void enviarMensagem(View view){
-        Toast.makeText(getBaseContext(),"Chegou",Toast.LENGTH_LONG).show();
-        System.out.println("Linha 49");
-        EditText writeMsg = (EditText) findViewById(R.id.editTextMessage);
-        String string = String.valueOf(writeMsg.getText());
-        sendReceive.write(string.getBytes());
+        if(delay == true){
+            Toast.makeText(getBaseContext(),"Chegou",Toast.LENGTH_LONG).show();
+            System.out.println("Linha 49");
+            EditText writeMsg = (EditText) findViewById(R.id.editTextMessage);
+            String string = String.valueOf(writeMsg.getText());
+            sendReceive.write(string.getBytes());
+        }else {
+            MainActivity.imprimir("Fazendo conexão");
+        }
     }
 
+    public static boolean delay = false;
     public static Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
 
             switch (msg.what){
                 case STATE_LISTENING:
+                    //MainActivity.imprimir("Escutando");
                     //status.setText("Listenig");
                     break;
                 case STATE_CONNECTING:
+                    //MainActivity.imprimir("Conectandooooooooo");
+                    delay=false;
                     //status.setText("Connecting");
                     break;
                 case STATE_CONNECTED:
+                    //MainActivity.imprimir("Conectado");
+                    delay = true;
                     //status.setText("Connected");
                     break;
                 case STATE_CONNECTION_FAILED:
+                    MainActivity.imprimir("Falha na conexão");
                     //status.setText("Connection falied");
                     break;
                 case STATE_MESSAGE_RECIVIED:
