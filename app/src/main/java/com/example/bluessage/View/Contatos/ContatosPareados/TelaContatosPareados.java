@@ -45,8 +45,6 @@ public class TelaContatosPareados extends Fragment {
 
         layoutContatosPareados = root.findViewById(R.id.layoutContatosPareados);
 
-        montarContato("Dispositivo Teste", "Nome do celular", "",null);
-
         contatosPareados();
         return root;
     }
@@ -160,7 +158,7 @@ public class TelaContatosPareados extends Fragment {
 
         return layoutPrincipal;
     }
-    public void montarContato(final String nomeUsuario, String nomeTelefone, String imagem,final BluetoothDevice device) {
+    public void montarContato(final String nomeUsuario, final String nomeTelefone, String imagem, final BluetoothDevice device) {
 
         LinearLayout linearLayoutPrincipal = montarLinearLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.VERTICAL, 10, 0, 0, 0);
@@ -170,6 +168,7 @@ public class TelaContatosPareados extends Fragment {
                 ClientClass clientClass = new ClientClass(device);
                 clientClass.start();
                 TelaChat.setNomeUsuario(nomeUsuario);
+                TelaChat.setEnderecoMac(nomeTelefone);
                 Intent in = new Intent(TelaContatos.telaContatos, TelaChat.class);
                 startActivity(in);
                 //status.setText("Connecteing");

@@ -51,8 +51,6 @@ public class TelaContatosNaoPareados extends Fragment {
 
         layoutContatosNaoPareados = root.findViewById(R.id.layoutContatosNaoPareados);
 
-        montarContato(-1,"Dispositivo Teste");
-
         // Register for broadcasts when a device is discovered.
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         getContext().registerReceiver(receiver, filter);

@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         layoutConversas = (LinearLayout) findViewById(R.id.layoutConversas);
 
-        montarConversa("Luís Felipe", "Ultima conversa listada", "");
-        montarConversa("Luís Felipe dwedwe wfwefwe egerg erfgreg", "Ultima conversa listada wefwef wefwef", "");
-
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Seu dispositivo não suporta Bluetooth!", Toast.LENGTH_LONG).show();
