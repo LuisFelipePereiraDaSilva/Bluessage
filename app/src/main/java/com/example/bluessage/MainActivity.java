@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bluessage.Controle.ServerClass;
 import com.example.bluessage.View.Chat.TelaChat;
 import com.example.bluessage.View.Contatos.TelaContatos;
 import com.example.bluessage.View.MenuTresPontos.MenuTresPontos;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dale = this;
 
         layoutConversas = (LinearLayout) findViewById(R.id.layoutConversas);
 
@@ -55,10 +57,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             } else {
                 bluetoothConecado = true;
+                iniciarServer();
             }
         }
 
+
         requestPermissions();
+    }
+
+    private void iniciarServer(){
+        ServerClass serverClass = new ServerClass();
+        serverClass.start();
+    }
+
+    private static MainActivity dale;
+    public static void imprimir(String messagem){
+        Toast.makeText(dale,messagem,Toast.LENGTH_LONG).show();
     }
 
     private int androidVersion; //define at top of code as a variable
@@ -82,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
                 bluetoothConecado = true;
+                iniciarServer();
             } else {
                 Toast.makeText(this, "Seu bluetooth não foi ativado", Toast.LENGTH_LONG).show();
             }

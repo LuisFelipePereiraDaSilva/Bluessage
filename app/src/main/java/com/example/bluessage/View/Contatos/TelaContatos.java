@@ -21,10 +21,13 @@ import com.example.bluessage.View.MenuTresPontos.MenuTresPontos;
 
 public class TelaContatos extends AppCompatActivity {
 
+    public static TelaContatos telaContatos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contatos);
+        telaContatos = this;
 
         getSupportActionBar().setTitle("Contatos");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

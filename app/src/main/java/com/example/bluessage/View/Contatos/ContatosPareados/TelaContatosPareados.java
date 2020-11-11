@@ -2,6 +2,7 @@ package com.example.bluessage.View.Contatos.ContatosPareados;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,8 +14,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.bluessage.Controle.ClientClass;
 import com.example.bluessage.MainActivity;
 import com.example.bluessage.R;
+import com.example.bluessage.View.Chat.TelaChat;
+import com.example.bluessage.View.Contatos.TelaContatos;
 
 import java.util.Set;
 
@@ -41,7 +45,7 @@ public class TelaContatosPareados extends Fragment {
 
         layoutContatosPareados = root.findViewById(R.id.layoutContatosPareados);
 
-        montarContato("Dispositivo Teste", "Nome do celular", "");
+        montarContato("Dispositivo Teste", "Nome do celular", "",null);
 
         contatosPareados();
         return root;
@@ -57,7 +61,7 @@ public class TelaContatosPareados extends Fragment {
                 for (BluetoothDevice device : pairedDevices) {
                     String deviceName = device.getName();
                     String deviceHardwareAddress = device.getAddress(); // MAC address
-                    montarContato(deviceName, deviceHardwareAddress, "");
+                    montarContato(deviceName, deviceHardwareAddress, "",device);
                 }
             }
         }
@@ -156,10 +160,21 @@ public class TelaContatosPareados extends Fragment {
 
         return layoutPrincipal;
     }
-    public void montarContato(String nomeUsuario, String nomeTelefone, String imagem) {
+    public void montarContato(final String nomeUsuario, String nomeTelefone, String imagem,final BluetoothDevice device) {
 
         LinearLayout linearLayoutPrincipal = montarLinearLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.VERTICAL, 10, 0, 0, 0);
+        linearLayoutPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClientClass clientClass = new ClientClass(device);
+                clientClass.start();
+                TelaChat.setNomeUsuario(nomeUsuario);
+                Intent in = new Intent(TelaContatos.telaContatos, TelaChat.class);
+                startActivity(in);
+                //status.setText("Connecteing");
+            }
+        });
 
         LinearLayout linearLayoutCorpo = montarLinearLayout(LinearLayout.LayoutParams.MATCH_PARENT, 180, LinearLayout.HORIZONTAL, 0,
                 0,0,25);
@@ -169,5 +184,7 @@ public class TelaContatosPareados extends Fragment {
         linearLayoutPrincipal.addView(linearLayoutCorpo);
 
         layoutContatosPareados.addView(linearLayoutPrincipal);
+
+
     }
 }
