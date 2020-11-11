@@ -6,6 +6,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.bluessage.Controle.Criptografia;
 import com.example.bluessage.Controle.SendReceive;
+import com.example.bluessage.Dados.DadosChat;
+import com.example.bluessage.Dados.Mensagem;
 import com.example.bluessage.MainActivity;
 import com.example.bluessage.R;
 
@@ -24,6 +28,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import info.androidhive.fontawesome.FontDrawable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 public class TelaChat extends AppCompatActivity {
@@ -32,6 +37,12 @@ public class TelaChat extends AppCompatActivity {
     public static void setNomeUsuario(String nome) {
         nomeUsuario = nome;
     }
+
+    private static String enderecoMac;
+    public static void setEnderecoMac(String endereco) {
+        enderecoMac = endereco;
+    }
+
     public static final int STATE_LISTENING = 1;
     public static final int STATE_CONNECTING = 2;
     public static final int STATE_CONNECTED = 3;
@@ -47,6 +58,10 @@ public class TelaChat extends AppCompatActivity {
     private static TelaChat telaChat;
 
     private LinearLayout linearLayoutMensagens;
+    private EditText editText;
+    private TextView textView;
+    private DadosChat dados;
+    private ArrayList<Mensagem> mensagems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,27 +74,75 @@ public class TelaChat extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         linearLayoutMensagens = (LinearLayout) findViewById(R.id.layoutChat);
+        textView = (TextView) findViewById(R.id.editTextMessageAux);
+        editText = (EditText) findViewById(R.id.editTextMessage);
+        editText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (editText.getText().toString().equals("")) {
+                    textView.setText("Digite uma Mensagem...");
+                } else {
+                    textView.setText("");
+                }
+            }
+        });
+
+        dados = new DadosChat(enderecoMac);
+
+        carregarMensagens();
+    }
+
+    public void carregarMensagens() {
+        try {
+            mensagems = dados.lerMessagens(this);
+            for (int i = 0; i < mensagems.size(); i++) {
+                montarMensagem(mensagems.get(i).getTexto(), mensagems.get(i).getUsuarioDestino().equals("") ? false : true);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void salvarMensagem(String texto, Boolean recebida) {
+        try {
+            Mensagem mensagem = new Mensagem(recebida ? nomeUsuario : "", texto, new Date());
+            mensagems.add(mensagem);
+            dados.salvarMessagens(this, mensagems);
+        } catch (Exception e) {
+            MainActivity.imprimir("Error ao salvar mensagens");
+        }
     }
 
     public void enviarMensagem(View view){
-        EditText writeMsg = (EditText) findViewById(R.id.editTextMessage);
-        String string = String.valueOf(writeMsg.getText());
-        montarMensagem(string, false);
-        sendReceive.write(Criptografia.criptografar(string).getBytes());
+        if(delay == true){
+            String string = String.valueOf(editText.getText());
+            montarMensagem(string, false);
+            salvarMensagem(string, false);
+            sendReceive.write(Criptografia.criptografar(string).getBytes());
+            editText.setText("");
+        }else {
+            MainActivity.imprimir("Nenhum conexão foi estabelecida");
+        }
     }
 
+    public static boolean delay = false;
     public static Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
 
             switch (msg.what){
                 case STATE_LISTENING:
+                    //MainActivity.imprimir("Escutando");
                     //status.setText("Listenig");
                     break;
                 case STATE_CONNECTING:
+                    //MainActivity.imprimir("Conectandooooooooo");
+                    delay=false;
                     //status.setText("Connecting");
                     break;
                 case STATE_CONNECTED:
+                    //MainActivity.imprimir("Conectado");
+                    delay = true;
                     //status.setText("Connected");
                     break;
                 case STATE_CONNECTION_FAILED:
@@ -88,9 +151,11 @@ public class TelaChat extends AppCompatActivity {
                 case STATE_MESSAGE_RECIVIED:
                     byte[] readBuff= (byte[]) msg.obj;
                     String tempMsg = new String(readBuff,0,msg.arg1);
-                    //msg_box.setText(tempMsg);
-                    if (TelaChat.telaChat != null)
+
+                    if (TelaChat.telaChat != null) {
+                        TelaChat.telaChat.salvarMensagem(tempMsg, true);
                         TelaChat.telaChat.montarMensagem(Criptografia.descriptografar(tempMsg), true);
+                    }
                     break;
             }
             return true;
